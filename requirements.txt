@@ -1,0 +1,7 @@
+Flask
+pandas
+ibm-db
+ibm_cloud_sdk_core
+requests
+numpy
+python-dotenv
