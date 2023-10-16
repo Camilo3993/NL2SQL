@@ -3,7 +3,7 @@ FROM python:latest
 
 
 #Labels as key value pair
-LABEL Maintainer="Miguel Correa"
+LABEL Maintainer="Camilo Campos"
 
 
 # Any working directory can be chosen as per choice like '/' or '/home' etc
