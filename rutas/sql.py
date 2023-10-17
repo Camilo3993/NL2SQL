@@ -224,22 +224,22 @@ def sentencia_sql(json_data):
     texto_descriptivo = extractDatabaseModelInfo(dataModel)
 
     ejemplos = """
+    Pregunta usuario : Cuál es el producto con el precio mas alto \n respuesta :SELECT PRODUCT_NAME, PRODUCT_PRICE FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES);
+    Pregunta usuario : Cuál es el numero de ventas realizadas por cada vendedor \n respuesta : SELECT SELLER_ID ,  COUNT(*) as VENTAS FROM SALES GROUP BY SELLER_ID
+    Pregunta usuario : cuantos productos diferentes se vendieron \n respuesta : SELECT PRODUCT_NAME, COUNT(*) AS cantidad_ventas FROM SALES GROUP BY PRODUCT_NAME ORDER BY cantidad_ventas DESC;
+    Pregunta usuario : Cuántos productos de la categoría Repuestos se vendieron \n respuesta :SELECT COUNT(*) as Repuestos FROM SALES WHERE PRODUCT_CATEGORY = 'Repuestos'
+    Pregunta usuario : Cuál es el precio promedio de los productos \n respuesta : SELECT AVG(PRODUCT_PRICE) as PROMEDIO_PRODUCTOS FROM SALES
+    Pregunta usuario : Cuántos clientes tienen 'CUSTOMER_ADDRESS'  vacio \n respuesta : SELECT COUNT(*) as CUSTOMER_ADDRESS_VACIO  FROM SALES WHERE CUSTOMER_ADDRESS IS NULL;
+    Pregunta usuario : Cuál es el cliente que ha realizado el mayor número de transacciones  \n respuesta : SELECT CUSTOMER_ID, COUNT(*) AS NUM_TRANS FROM SALES GROUP BY CUSTOMER_ID ORDER BY COUNT(*) DESC ;
+    Pregunta usuario : Cuál es el total de ventas hasta la fecha \n respuesta : SELECT SUM(PRODUCT_PRICE) AS Total_Ventas FROM SALES;
     Pregunta usuario : Cuál es el nombre del vendedor con más experiencia \n respuesta : SELECT SELLER_NAME FROM SALES GROUP BY SELLER_NAME ORDER BY (DAYS(MAX(DATE_SELL)) - DAYS(MIN(DATE_SELL))) DESC FETCH FIRST 1 ROWS ONLY;
-    Pregunta usuario : Cuántos productos únicos ha comprado cada cliente y cuál es el nombre del cliente que ha comprado la mayor cantidad de productos únicos.\nrespuesta : SELECT CUSTOMER_NAME, CUSTOMER_ID, COUNT(DISTINCT PRODUCT_NAME) AS PRODUCTOS_UNICOS_COMPRADOS FROM SALES GROUP BY CUSTOMER_NAME, CUSTOMER_ID ORDER BY PRODUCTOS_UNICOS_COMPRADOS DESC LIMIT 1;
-    Pregunta usuario : Cuál es el vendedor que ha vendido productos en más categorías diferentes y cuántas categorías ha cubierto .\n  respuesta :SELECT SELLER_NAME, SELLER_ID, COUNT(DISTINCT PRODUCT_CATEGORY) AS CATEGORIAS_DIFERENTES FROM SALES GROUP BY SELLER_NAME, SELLER_ID ORDER BY CATEGORIAS_DIFERENTES DESC LIMIT 1;
-    Pregunta usuario : Cuál es el producto más caro vendido por cada vendedor y en qué fecha se realizó esa venta. \n respuesta : SELECT SELLER_NAME, PRODUCT_NAME, MAX(PRODUCT_PRICE) AS PRECIO_MAXIMO, DATE_SELL FROM SALES GROUP BY SELLER_NAME, PRODUCT_NAME, DATE_SELL HAVING PRODUCT_PRICE = MAX(PRODUCT_PRICE);
-    Pregunta usuario : Cuántos productos ha vendido cada vendedor en cada categoría, y quién es el vendedor con más ventas en una categoría específica \n respuesta :SELECT SELLER_NAME, PRODUCT_CATEGORY, COUNT(*) AS VENTAS FROM SALES GROUP BY SELLER_NAME, PRODUCT_CATEGORY HAVING VENTAS = ( SELECT MAX(VENTAS) FROM ( SELECT SELLER_NAME, PRODUCT_CATEGORY, COUNT(*) AS VENTAS FROM SALES GROUP BY SELLER_NAME, PRODUCT_CATEGORY ) AS VENTAS_POR_VENDEDOR_Y_CATEGORIA );
-    Pregunta usuario : Cuántas categorías de vendedores existen \n respuesta :SELECT 'Cantidad Categorías', COUNT(DISTINCT(SELLER_CATEGORY)) FROM SALES;
-    Pregunta usuario : Cuántos productos se vendieron en cada una de las categorías de productos \n respuesta :SELECT PRODUCT_CATEGORY, COUNT(*) AS COUNT_OF_PRODUCT_SOLD FROM SALES GROUP BY PRODUCT_CATEGORY
-    Pregunta usuario : Cuál es la fecha y hora de la primera venta registrada \n respuesta : SELECT DATE_SELL, TIME_SELL FROM SALES order by ID_SALES  ASC LIMIT 1;
-    Pregunta usuario : Cómo evolucionan las ventas mensuales del vendedor 104 a lo largo de todo el año 2023 \n respuesta : SELECT EXTRACT(MONTH FROM DATE_SELL) AS Mes, SUM(PRODUCT_PRICE) AS Ventas_Mensuales FROM  SALES WHERE  SELLER_ID = 104 AND EXTRACT(YEAR FROM DATE_SELL) = 2023 GROUP BY  EXTRACT(MONTH FROM DATE_SELL) ORDER BY  EXTRACT(MONTH FROM DATE_SELL);
-    Pregunta usuario : Cuál es el porcentaje de ventas que representan los productos de la categoría Autos con respecto al total de ventas  \n respuesta : SELECT (SUM(CASE WHEN PRODUCT_CATEGORY = 'Autos' THEN PRODUCT_PRICE ELSE 0 END) / SUM(PRODUCT_PRICE)) * 100 AS Porcentaje_Ventas_Autos FROM SALES;
-    Pregunta usuario : Cuál es el producto que ha tenido la mayor fluctuación en su precio a lo largo del año 2010 \n respuesta : SELECT PRODUCT_NAME, MAX(PRODUCT_PRICE) AS PRECIO_MAXIMO, MIN(PRODUCT_PRICE) AS PRECIO_MINIMO, (MAX(PRODUCT_PRICE) - MIN(PRODUCT_PRICE)) AS FLUCTUACION FROM SALES WHERE YEAR(DATE_SELL) = 2010 GROUP BY PRODUCT_NAME ORDER BY FLUCTUACION DESC LIMIT 1;
-    Pregunta usuario : Cuántos clientes tienen 'CUSTOMER_PHONE_NUMBER'  vacio \n respuesta : SELECT COUNT(*) AS CUSTOMER_PHONE_NUMBER_Vacio FROM SALES WHERE CUSTOMER_PHONE_NUMBER IS NULL;
-    Pregunta usuario : Cuántos vendedores llevan mas de 10 años trabajando \n respuesta :SELECT COUNT(*) AS VENDEDOR_CON_MAS_10_AÑOS FROM SALES WHERE SELLER_NAME LIKE '%>10%'
-    Pregunta usuario : Cuál es el cliente que ha realizado compras en todas las categorías de productos disponibles \n respuesta :SELECT CUSTOMER_NAME FROM SALES GROUP BY CUSTOMER_NAME HAVING COUNT(DISTINCT PRODUCT_CATEGORY) = (SELECT COUNT(DISTINCT PRODUCT_CATEGORY) FROM SALES);
-    Pregunta usuario : Cuál es el producto con el precio mas elevado \n respuesta : SELECT PRODUCT_NAME, PRODUCT_PRICE FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES)
-
+    Pregunta usuario : Cuántos productos se vendieron en cada una de las categorías de productos \n respuesta : SELECT PRODUCT_CATEGORY, COUNT(*) AS CANTIDAD_VENDIDO FROM SALES GROUP BY PRODUCT_CATEGORY:
+    Pregunta usuario : Cuál es el cliente que ha realizado la compra más costosa en una sola transacción \n respuesta : SELECT CUSTOMER_NAME, SUM(PRODUCT_PRICE) AS compra_mas_costosa FROM SALES GROUP BY CUSTOMER_NAME ORDER BY compra_mas_costosa DESC ;
+    Pregunta usuario :Cuál es el producto más vendido en la categoría 'Repuestos' ordenados por el nombre \n respuesta : SELECT PRODUCT_NAME FROM SALES WHERE PRODUCT_CATEGORY = 'Repuestos' ORDER BY PRODUCT_NAME;
+    Pregunta usuario : Cuál es el cliente que ha gastado más dinero en total \n respuesta : SELECT CUSTOMER_ID, SUM(PRODUCT_PRICE * PRODUCTS_IN_STOCK) AS TOTAL_GASTADO FROM SALES GROUP BY CUSTOMER_ID ORDER BY TOTAL_GASTADO DESC
+    Pregunta usuario : Cuál es el promedio de ventas de los productos por día \n respuesta : SELECT DATE_SELL, AVG(PRODUCT_PRICE) AS Promedio_Ventas FROM SALES GROUP BY DATE_SELL; 
+    Pregunta usuario : Cuál es la fecha y hora de la última transacción registrada \n respuesta : SELECT DATE_SELL, TIME_SELL FROM SALES order by ID_SALES  DESC LIMIT 1;;
+    Pregunta usuario : necesito las ventas del cliente constructora hidalgo para todo el año 2023 en las categorias Herramientas y Suspension \n respuesta : SELECT SUM(SALES.PRODUCT_PRICE * SALES.PRODUCTS_IN_STOCK) AS TOTAL_SALES FROM SALES WHERE CUSTOMER_NAME = 'constructora hidalgo' AND PRODUCT_CATEGORY IN ('Herramientas', 'Suspension') AND DATE_SELL BETWEEN '2023-01-01' AND '2023-12-31' 
     """
 
     def queryFactory2(texto_descriptivo, pregunta_usuario , ejemplos):
@@ -253,7 +253,7 @@ def sentencia_sql(json_data):
         resultado = prompt.generate(prompt_text, model_id, parameters)
         return resultado
 
-    query = queryFactory2(texto_descriptivo, pregunta_usuario , ejemplos)
+    query = queryFactory2(texto_descriptivo, pregunta_formateada , ejemplos)
 
     print(query)
 
@@ -280,7 +280,7 @@ def sentencia_sql(json_data):
     conn.commit()
     cursor.close()
     conn.close()
-    print(tabla_sales)
+    #print(tabla_sales)
     datos=tabla_sales.to_json(orient ='index')
 
     import json
@@ -291,13 +291,14 @@ def sentencia_sql(json_data):
 
     # Inicializar una cadena de texto vacía para almacenar la información
     informacion_texto = ""
+    from datetime import datetime
 
     # Recorrer el diccionario y agregar la información en formato de texto lineal
     for key, value in data.items():
-        
         for subkey, subvalue in value.items():
-            if subkey == "DATE_SELL":
-                fecha_formateada = datetime.utcfromtimestamp(subvalue / 1000).strftime('%Y-%m-%d')
+            if subkey in ["DATE_SELL", "PRODUCT_DATE_ADDED", "TIME_SELL", "PRODUCT_DATE_MODIFIED"]:
+                subvalue = subvalue / 1000.0  # Convertir de milisegundos a segundos (utiliza 1000.0 para asegurarte de obtener un valor decimal)
+                fecha_formateada = datetime.utcfromtimestamp(subvalue).strftime('%d/%m/%Y')
                 informacion_texto += f" {subkey} : {fecha_formateada}, "
             else:
                 informacion_texto += f" {subkey} : {subvalue}, "
