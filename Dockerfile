@@ -14,9 +14,9 @@ COPY requirements.txt .
 #to COPY the remote file at working directory in container
 COPY main.py .
 COPY .env .
-COPY rutas/ ./rutas
-COPY auth/ ./auth
-COPY prompt/ ./prompt 
+COPY rutas/ ./rutas/
+COPY auth/ ./auth/
+COPY prompt/ ./prompt/ 
 
 # Now the structure looks like this '/usr/app/src/test.py'
 RUN pip install --no-cache -r "requirements.txt"
