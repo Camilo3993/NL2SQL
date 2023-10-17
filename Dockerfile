@@ -1,30 +1,28 @@
-#Deriving the latest base image
+#Deriving the base image
 FROM python:3.9.18-slim-bullseye
 
-#Crear entorno virtual
+# Crear un entorno virtual
 RUN python -m venv /opt/env
 
-#Activar el entorno virtual
+# Activar el entorno virtual
 ENV PATH="/opt/venv/bin:$PATH"
 
+# Establecer el directorio de trabajo en el contenedor
 WORKDIR /usr/app/src
 
+# Copiar los archivos necesarios al contenedor
 COPY requirements.txt .
-
-#to COPY the remote file at working directory in container
 COPY main.py .
 COPY .env .
 COPY rutas/ ./rutas/
 COPY auth/ ./auth/
-COPY prompt/ ./prompt/ 
+COPY prompt/ ./prompt/
 
-# Now the structure looks like this '/usr/app/src/test.py'
-RUN pip install --no-cache -r "requirements.txt"
+# Instalar las dependencias
+RUN pip install --no-cache -r requirements.txt
 
-#Labels as key value pair
+# Etiqueta para el mantenedor de la imagen
 LABEL Maintainer="Camilo Campos"
 
-#CMD instruction should be used to run the software
-#contained by your image, along with any arguments.
-
+# Comando para ejecutar la aplicación
 CMD [ "python", "./main.py"]
