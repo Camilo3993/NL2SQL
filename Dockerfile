@@ -2,7 +2,7 @@
 FROM python:3.9.18-slim-bullseye
 
 #Crear entorno virtual
-RUN python -m env /opt/env
+RUN python -m venv /opt/env
 
 #Activar el entorno virtual
 ENV PATH="/opt/venv/bin:$PATH"
