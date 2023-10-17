@@ -41,7 +41,7 @@ parameters = {
 def extraccion_entidades(json_data):
 
     json_data = request.json
-    print("aqui estamos")
+    
 
     if not json_data or 'pregunta' not in json_data:
         return jsonify({"error": "Invalid JSON format"}), 400    
@@ -66,7 +66,7 @@ def extraccion_entidades(json_data):
 
     pregunta_formateada = formatear_pregunta(pregunta_usuario)
     #print(f"Pregunta formateada: {pregunta_formateada}")
-    print("aqui estamos 2 ")
+    
 
 
     ejemplos = """
@@ -137,6 +137,10 @@ def extraccion_entidades(json_data):
     Ejemplo 17:
       Texto: cuántos clientes tienen direccion del cliente vacio
       Respuesta: entidad: cliente, condicion: vacio , valor : direccion del cliente
+
+    Ejemplo 18:
+      Texto: como puedo hacer un torta
+      Respuesta: entidad : torta , condicion : como puedo hacer
       """
 
 
@@ -152,7 +156,7 @@ def extraccion_entidades(json_data):
         return resultado
 
     entidades = extracccion(pregunta_formateada, ejemplos)
-    print("aqui estamos 3")
+    
     response_data = {'Entidades': entidades}
 
 
