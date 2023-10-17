@@ -238,7 +238,7 @@ def sentencia_sql(json_data):
     Pregunta usuario : Cuántos clientes tienen 'CUSTOMER_PHONE_NUMBER'  vacio \n respuesta : SELECT COUNT(*) AS CUSTOMER_PHONE_NUMBER_Vacio FROM SALES WHERE CUSTOMER_PHONE_NUMBER IS NULL;
     Pregunta usuario : Cuántos vendedores llevan mas de 10 años trabajando \n respuesta :SELECT COUNT(*) AS VENDEDOR_CON_MAS_10_AÑOS FROM SALES WHERE SELLER_NAME LIKE '%>10%'
     Pregunta usuario : Cuál es el cliente que ha realizado compras en todas las categorías de productos disponibles \n respuesta :SELECT CUSTOMER_NAME FROM SALES GROUP BY CUSTOMER_NAME HAVING COUNT(DISTINCT PRODUCT_CATEGORY) = (SELECT COUNT(DISTINCT PRODUCT_CATEGORY) FROM SALES);
-    Pregunta usuario : Cuál es el producto con el precio mas elevado \n respuesta :   SELECT PRODUCT_NAME, PRODUCT_PRICE FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES)
+    Pregunta usuario : Cuál es el producto con el precio mas elevado \n respuesta : SELECT PRODUCT_NAME, PRODUCT_PRICE FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES)
 
     """
 

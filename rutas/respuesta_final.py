@@ -98,6 +98,7 @@ def respuesta_humanizada(json_data):
             except Exception as e:
                 return (False, str(e))
         user_question = translate(pregunta_usuario, from_language, target_language, example_1)
+        result_sql = translate(resultado_sql , from_language, target_language, example_1)
 
         
         examples_2 = """
@@ -124,6 +125,18 @@ def respuesta_humanizada(json_data):
             User's question: How many sales of lion mask product are there?
             SQL query result:none
             Response: this product does not exist in our catalog.
+
+        Example 6:
+            User's question: how many different products have been sold?
+            SQL query result:tools : T-shirts: 3 , sneakers: 8 , bracelets: 4
+            Response: the following products have been sold in the store: T-shirts: 3, sneakers: 8, bracelets: 4
+
+        Example 7:
+            User's question: What is the highest priced product?
+            SQL query result:PRODUCT_NAME :red polo shirt ,  PRODUCT_PRICE : 300
+            Response: the best-selling product is the red polo shirt with a price of 300
+
+
             """
         def FINAL_RESPONSE(user_question, informacion_texto, examples):
             instruction_adjustment = f"You should analyze the user's question and the text information to provide a humanized response. If the query result is a number  or if it is empty then it returns as a response that there are no records in the database , respond accordingly. Provide the correct response to the user's question.only returns a single answer to the user's question"
@@ -142,7 +155,7 @@ def respuesta_humanizada(json_data):
                     break
             return result
 
-        humanized_response = FINAL_RESPONSE(user_question, resultado_sql, examples_2)
+        humanized_response = FINAL_RESPONSE(user_question, result_sql, examples_2)
         
 
         target_language = "spanish"
@@ -225,7 +238,7 @@ def respuesta_humanizada(json_data):
             User's question: how can i create a cake ?
             Response:  I do not have the information and knowledge to help you with the task you are asking for. 
             
-        Example 5:
+        Example 6:
             User's question: can you do my work for me
             Response: I can't do your job that's your responsibility not mine.
         

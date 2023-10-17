@@ -11,7 +11,7 @@ LABEL Maintainer="Camilo Campos"
 WORKDIR /usr/app/src
 
 #to COPY the remote file at working directory in container
-COPY text_to_query.py ./
+COPY main.py ./
 COPY requirements.txt ./
 # Now the structure looks like this '/usr/app/src/test.py'
 RUN pip install -r "requirements.txt"
@@ -22,4 +22,4 @@ EXPOSE 8080
 #CMD instruction should be used to run the software
 #contained by your image, along with any arguments.
 
-CMD [ "python", "./Extraccion_Entidades.py"]
+CMD [ "python", "./main.py"]
