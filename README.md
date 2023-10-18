@@ -14,6 +14,11 @@ Este repositorio implementa un proceso para traducir preguntas en lenguaje natur
   "pregunta": "Cuál es el total de ventas hasta la fecha"
 }
 
+**Resultado:**
+{
+  "clasificación" : "Válida"
+}
+
 
 ### Ruta 2: Clasificación de la Pregunta
 
@@ -27,7 +32,7 @@ La segunda ruta es la "Clasificación de la pregunta." Para utilizar esta funci�
   "entidades": "entidad:total de ventas, fecha: hasta la fecha"
 }
 
-Resultado:
+**Resultado:**
 {
   "clasificación" : "Válida"
 }
