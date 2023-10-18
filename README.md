@@ -15,6 +15,7 @@ Este repositorio implementa un proceso para traducir preguntas en lenguaje natur
 }
 
 **Resultado:**
+
 {
   "clasificación" : "Válida"
 }
@@ -27,12 +28,14 @@ Este repositorio implementa un proceso para traducir preguntas en lenguaje natur
 La segunda ruta es la "Clasificación de la pregunta." Para utilizar esta función, se debe entregar la pregunta del usuario junto con las entidades extraídas del paso anterior.
 
 **Información necesaria:**
+
 {
   "pregunta": "Cuál es el total de ventas hasta la fecha",
   "entidades": "entidad:total de ventas, fecha: hasta la fecha"
 }
 
 **Resultado:**
+
 {
   "clasificación" : "Válida"
 }
@@ -44,11 +47,13 @@ La segunda ruta es la "Clasificación de la pregunta." Para utilizar esta funci�
 La tercera ruta es la "Creación de la sentencia SQL para responder la pregunta del usuario." Esta ruta solo necesita la pregunta del usuario.
 
 **Información necesaria:**
+
 {
   "pregunta": "Cuál es el total de ventas hasta la fecha"
 }
   
 **Resultado:**
+
 {
     "resultado SQL": "TOTAL_VENTAS : 3379.31\n",
     "sentencia SQL": "\nSELECT sum(product_price) as total_ventas FROM sales"
@@ -64,6 +69,7 @@ Camino 1.
 
 
 **Información necesaria:**
+
 {
   "pregunta": "Cuál es el número de ventas realizadas por cada vendedor de la tienda",
   "clasificación": "Válida",
@@ -71,6 +77,7 @@ Camino 1.
 }
 
 **Resultado:**
+
 {
   "Respuesta humanizada": "El número de ventas del vendedor con ID 101 es de 7 ventas, el vendedor con ID 102 tiene 4 ventas, el vendedor con ID 103 tiene 5 ventas y el vendedor con ID 104 tiene 4 ventas."
 }
@@ -79,12 +86,14 @@ Camino 2.
 
 
 **Información necesaria:**
+
 {
   "pregunta": "¿Cuántos años tienes?",
   "clasificación": "No Válida"
 }
 
 **Resultado:**
+
 {
-    "Respuesta humanizada": "Soy un chatbot, por lo cual no tengo edad. Puedo ayudarte en alguna otra cosa."
+  "Respuesta humanizada": "Soy un chatbot, por lo cual no tengo edad. Puedo ayudarte en alguna otra cosa."
 }
