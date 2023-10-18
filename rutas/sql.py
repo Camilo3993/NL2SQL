@@ -224,22 +224,57 @@ def sentencia_sql(json_data):
     texto_descriptivo = extractDatabaseModelInfo(dataModel)
 
     ejemplos = """
-    Pregunta usuario : Cuál es el producto con el precio mas alto \n respuesta :SELECT PRODUCT_NAME, PRODUCT_PRICE FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES);
-    Pregunta usuario : Cuál es el numero de ventas realizadas por cada vendedor \n respuesta : SELECT SELLER_ID ,  COUNT(*) as VENTAS FROM SALES GROUP BY SELLER_ID
-    Pregunta usuario : cuantos productos diferentes se vendieron \n respuesta : SELECT PRODUCT_NAME, COUNT(*) AS cantidad_ventas FROM SALES GROUP BY PRODUCT_NAME ORDER BY cantidad_ventas DESC;
-    Pregunta usuario : Cuántos productos de la categoría Repuestos se vendieron \n respuesta :SELECT COUNT(*) as Repuestos FROM SALES WHERE PRODUCT_CATEGORY = 'Repuestos'
-    Pregunta usuario : Cuál es el precio promedio de los productos \n respuesta : SELECT AVG(PRODUCT_PRICE) as PROMEDIO_PRODUCTOS FROM SALES
-    Pregunta usuario : Cuántos clientes tienen 'CUSTOMER_ADDRESS'  vacio \n respuesta : SELECT COUNT(*) as CUSTOMER_ADDRESS_VACIO  FROM SALES WHERE CUSTOMER_ADDRESS IS NULL;
-    Pregunta usuario : Cuál es el cliente que ha realizado el mayor número de transacciones  \n respuesta : SELECT CUSTOMER_ID, COUNT(*) AS NUM_TRANS FROM SALES GROUP BY CUSTOMER_ID ORDER BY COUNT(*) DESC ;
-    Pregunta usuario : Cuál es el total de ventas hasta la fecha \n respuesta : SELECT SUM(PRODUCT_PRICE) AS Total_Ventas FROM SALES;
-    Pregunta usuario : Cuál es el nombre del vendedor con más experiencia \n respuesta : SELECT SELLER_NAME FROM SALES GROUP BY SELLER_NAME ORDER BY (DAYS(MAX(DATE_SELL)) - DAYS(MIN(DATE_SELL))) DESC FETCH FIRST 1 ROWS ONLY;
-    Pregunta usuario : Cuántos productos se vendieron en cada una de las categorías de productos \n respuesta : SELECT PRODUCT_CATEGORY, COUNT(*) AS CANTIDAD_VENDIDO FROM SALES GROUP BY PRODUCT_CATEGORY:
-    Pregunta usuario : Cuál es el cliente que ha realizado la compra más costosa en una sola transacción \n respuesta : SELECT CUSTOMER_NAME, SUM(PRODUCT_PRICE) AS compra_mas_costosa FROM SALES GROUP BY CUSTOMER_NAME ORDER BY compra_mas_costosa DESC ;
-    Pregunta usuario :Cuál es el producto más vendido en la categoría 'Repuestos' ordenados por el nombre \n respuesta : SELECT PRODUCT_NAME FROM SALES WHERE PRODUCT_CATEGORY = 'Repuestos' ORDER BY PRODUCT_NAME;
-    Pregunta usuario : Cuál es el cliente que ha gastado más dinero en total \n respuesta : SELECT CUSTOMER_ID, SUM(PRODUCT_PRICE * PRODUCTS_IN_STOCK) AS TOTAL_GASTADO FROM SALES GROUP BY CUSTOMER_ID ORDER BY TOTAL_GASTADO DESC
-    Pregunta usuario : Cuál es el promedio de ventas de los productos por día \n respuesta : SELECT DATE_SELL, AVG(PRODUCT_PRICE) AS Promedio_Ventas FROM SALES GROUP BY DATE_SELL; 
-    Pregunta usuario : Cuál es la fecha y hora de la última transacción registrada \n respuesta : SELECT DATE_SELL, TIME_SELL FROM SALES order by ID_SALES  DESC LIMIT 1;;
-    Pregunta usuario : necesito las ventas del cliente constructora hidalgo para todo el año 2023 en las categorias Herramientas y Suspension \n respuesta : SELECT SUM(SALES.PRODUCT_PRICE * SALES.PRODUCTS_IN_STOCK) AS TOTAL_SALES FROM SALES WHERE CUSTOMER_NAME = 'constructora hidalgo' AND PRODUCT_CATEGORY IN ('Herramientas', 'Suspension') AND DATE_SELL BETWEEN '2023-01-01' AND '2023-12-31' 
+    ejemplo 1:
+        Pregunta usuario : Cuál es el total de ventas hasta la fecha 
+        respuesta : SELECT SUM(PRODUCT_PRICE) AS Total_Ventas FROM SALES;
+    ejemplo 2:
+        Pregunta usuario : Cuál es el producto con el precio mas alto 
+        respuesta :SELECT PRODUCT_NAME, PRODUCT_PRICE FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES);
+    ejemplo 3:
+        Pregunta usuario : Cuál es el numero de ventas realizadas por cada vendedor 
+        respuesta : SELECT SELLER_ID ,  COUNT(*) as VENTAS FROM SALES GROUP BY SELLER_ID;
+    ejemplo 4:    
+        Pregunta usuario : cuantos productos diferentes se vendieron 
+        respuesta : SELECT COUNT(DISTINCT PRODUCT_NAME) as PRODUCTOS_DIFERENTES FROM SALES ;
+    ejemplo 5:
+        Pregunta usuario : Cuántos productos de la categoría Repuestos se vendieron 
+        respuesta :SELECT COUNT(*) as Repuestos FROM SALES WHERE PRODUCT_CATEGORY = 'Repuestos';
+    ejemplo 6:
+        Pregunta usuario : Cuál es el precio promedio de los productos 
+        respuesta : SELECT AVG(PRODUCT_PRICE) as PROMEDIO_PRODUCTOS FROM SALES;
+    ejemplo 7:
+        Pregunta usuario : Cuántos clientes tienen 'CUSTOMER_ADDRESS'  vacio 
+        respuesta : SELECT COUNT(*) as CUSTOMER_ADDRESS_VACIO  FROM SALES WHERE CUSTOMER_ADDRESS IS NULL;
+    ejemplo 8:
+        Pregunta usuario : Cuál es el cliente que ha realizado el mayor número de transacciones  
+        respuesta : SELECT CUSTOMER_ID, COUNT(*) AS NUM_TRANS FROM SALES GROUP BY CUSTOMER_ID ORDER BY COUNT(*) DESC ;
+    ejemplo 9:
+        Pregunta usuario : Cuál es el nombre del vendedor con más experiencia 
+        respuesta : SELECT SELLER_NAME FROM SALES GROUP BY SELLER_NAME ORDER BY (DAYS(MAX(DATE_SELL)) - DAYS(MIN(DATE_SELL))) DESC FETCH FIRST 1 ROWS ONLY;
+    ejemplo 10:
+        Pregunta usuario : Cuántos productos se vendieron en cada una de las categorías de productos 
+        respuesta : SELECT PRODUCT_CATEGORY, COUNT(*) AS CANTIDAD_VENDIDO FROM SALES GROUP BY PRODUCT_CATEGORY;
+    ejemplo 11:
+        Pregunta usuario : Cuál es el cliente que ha realizado la compra más costosa en una sola transacción 
+        respuesta : SELECT CUSTOMER_NAME, SUM(PRODUCT_PRICE) AS compra_mas_costosa FROM SALES GROUP BY CUSTOMER_NAME ORDER BY compra_mas_costosa DESC ;
+    ejemplo 12:
+        Pregunta usuario :Cuál es el producto más vendido en la categoría 'Repuestos' ordenados por el nombre 
+        respuesta : SELECT PRODUCT_NAME FROM SALES WHERE PRODUCT_CATEGORY = 'Repuestos' ORDER BY PRODUCT_NAME;
+    ejemplo 13:
+        Pregunta usuario : Cuál es el cliente que ha gastado más dinero en total  
+        respuesta : SELECT CUSTOMER_ID, SUM(PRODUCT_PRICE * PRODUCTS_IN_STOCK) AS TOTAL_GASTADO FROM SALES GROUP BY CUSTOMER_ID ORDER BY TOTAL_GASTADO DESC;
+    ejemplo 14:
+        Pregunta usuario : Cuál es el promedio de ventas de los productos por día  
+        respuesta : SELECT DATE_SELL, AVG(PRODUCT_PRICE) AS Promedio_Ventas FROM SALES GROUP BY DATE_SELL; 
+    ejemplo 15:
+        Pregunta usuario : Cuál es la fecha y hora de la última transacción registrada 
+        respuesta : SELECT DATE_SELL, TIME_SELL FROM SALES order by ID_SALES  DESC LIMIT 1;;
+    ejemplo 16:
+        Pregunta usuario : necesito las ventas del cliente constructora hidalgo para todo el año 2023 en las categorias Herramientas y Suspension 
+        respuesta : SELECT SUM(SALES.PRODUCT_PRICE * SALES.PRODUCTS_IN_STOCK) AS TOTAL_SALES FROM SALES WHERE CUSTOMER_NAME = 'constructora hidalgo' AND PRODUCT_CATEGORY IN ('Herramientas', 'Suspension') AND DATE_SELL BETWEEN '2023-01-01' AND '2023-12-31';
+    ejemplo 17:
+        Pregunta usuario : Cuál es el vendedor que ha realizado la venta más costosa en una sola transacción 
+        respuesta : SELECT SELLER_NAME FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES);
     """
 
     def queryFactory2(texto_descriptivo, pregunta_usuario , ejemplos):

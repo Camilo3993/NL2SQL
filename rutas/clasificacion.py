@@ -529,7 +529,7 @@ def clasificacion_pregunta(json_data):
         Question: Which is the client that has spent the most money in total ?
         Classification: Valido
     
-    Ejemplo 21:
+    Ejemplo 18:
         Pregunta:How many customers have a blank customer address ? 
         Clasificacion: Valido
 
