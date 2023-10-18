@@ -53,9 +53,11 @@ Resultado:
 ## Ruta 4: Respuesta Humanizada del Asistente
 Descripción: La respuesta final del asistente depende de la clasificación de la pregunta. Se pueden seguir dos caminos distintos.
 
-La cuarta ruta es la "Respuesta humanizada del asistente," donde existen dos caminos. Estos caminos dependerán de la clasificación de la pregunta. Si la pregunta es válida, se necesita la pregunta del usuario, la clasificación y el resultado SQL para poder dar una respuesta humanizada. En el camino 2, cuando la pregunta del usuario no es válida, solo se necesita la clasificación y la pregunta del usuario.
+Estos caminos dependerán de la clasificación de la pregunta. Si la pregunta es válida, se necesita la pregunta del usuario, la clasificación y el resultado SQL para poder dar una respuesta humanizada. En el camino 2, cuando la pregunta del usuario no es válida, solo se necesita la clasificación y la pregunta del usuario.
 
 Camino 1.
+
+
 Información necesaria:
 {
   "pregunta": "Cuál es el número de ventas realizadas por cada vendedor de la tienda",
@@ -69,6 +71,8 @@ Resultado:
 }
 
 Camino 2.
+
+
 Información necesaria:
 {
   "pregunta": "¿Cuántos años tienes?",
