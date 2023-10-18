@@ -11,7 +11,10 @@ from prompt.prompt import Prompt
 app = Flask(__name__)
 
 # Selección del modelo
-model_id = os.getenv("GRANITE")
+model_id = os.getenv("MPT")
+
+# Selección del modelo
+model_id_2 = os.getenv("GRANITE")
 
 # Selección del ID del proyecto
 project_id = os.getenv("IBM_WATSON_STUDIO_PROJECT_ID")
@@ -291,6 +294,19 @@ def sentencia_sql(json_data):
     query = queryFactory2(texto_descriptivo, pregunta_formateada , ejemplos)
 
     print(query)
+
+    def clasificacion_sql(text, examples):
+        promptTuning = "Classify the provided values as 'exactly the same' , 'similar' , 'different' or 'not valid' by their similarity between the sql statement that provided the model and the examples. To classify questions as exactly the same compare the sql statement in the answer with the examples if they are the same it is exactly the same , for sql statements similar compare the sql statement in the answer with the examples if the results are the same but the sql statement is not similar in similar , for sql statements different compare the sql statement in the answer with the examples if the results are different and the sql statement is also different it is different and for sql statements not valid it is when the model delivers anything but a sql statement . You should use the examples only as a guide for your classification but do not include information from the examples in the answer. Avoid returning the original entry and only provide a classification. Do not repeat information "
+        prompt_text = f"Instructions to follow: {promptTuning}\nExamples to guide classification:{examples}\nQuestion to classify: {text}\nClassification: "
+        
+        # Create a Prompt object (make sure you have access_token and project_id defined previously)
+        prompt = Prompt(access_token, project_id)
+        
+        # Call the generate method with the text string instead of the Prompt object
+        result = prompt.generate(prompt_text, model_id_2, parameters)
+        return result
+
+    #sql_clasificacion= clasificacion_sql()
 
     import pandas as pd
     import os, ibm_db, ibm_db_dbi as dbi, pandas as pd
