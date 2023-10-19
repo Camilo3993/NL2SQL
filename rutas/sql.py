@@ -340,7 +340,7 @@ def sentencia_sql(json_data):
     def clasificar_similitud(similitud):
         if abs(similitud - 1.00) < 0.01:  # Comparación con una pequeña diferencia
             return "Exactamente Igual"
-        elif 0.60 <= similitud < 0.90:
+        elif 0.60 <= similitud <= 0.90:
             return "Similar"
         elif 0.20 <= similitud <= 0.50:
             return "Distinto"
