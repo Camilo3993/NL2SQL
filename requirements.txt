@@ -5,3 +5,4 @@ ibm_cloud_sdk_core
 requests
 numpy
 python-dotenv
+scikit-learn
