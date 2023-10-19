@@ -42,7 +42,7 @@ La segunda ruta es la "Clasificación de la pregunta." Para utilizar esta funci�
 
 ### Ruta 3: Creación de la Sentencia SQL
 
-**Descripción:** Esta ruta genera la sentencia SQL para responder la pregunta del usuario.
+**Descripción:** Esta ruta genera la sentencia SQL para responder la pregunta del usuario. Se realiza una clasificación para determinar si la sentencia SQL es exactamente igual a los ejemplos proporcionados, si es similar, si es diferente pero produce el mismo resultado, o si simplemente no es una sentencia SQL válida.
 
 La tercera ruta es la "Creación de la sentencia SQL para responder la pregunta del usuario." Esta ruta solo necesita la pregunta del usuario.
 
@@ -56,6 +56,7 @@ La tercera ruta es la "Creación de la sentencia SQL para responder la pregunta 
 
 {
     "resultado SQL": "TOTAL_VENTAS : 3379.31\n",
+    "clasificacion" :"exactamente igual"
     "sentencia SQL": "\nSELECT sum(product_price) as total_ventas FROM sales"
 }
 
