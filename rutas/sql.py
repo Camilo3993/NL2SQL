@@ -313,60 +313,6 @@ def sentencia_sql(json_data):
     sql_formateado = formatear_pregunta(query)
 
 
-    from sklearn.feature_extraction.text import TfidfVectorizer
-    from sklearn.metrics.pairwise import cosine_similarity
-
-    # Ejemplos de SQL
-    ejemplos = ["SELECT SELLER_NAME FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES);",
-                "SELECT SUM(SALES.PRODUCT_PRICE * SALES.PRODUCTS_IN_STOCK) AS TOTAL_SALES FROM SALES WHERE CUSTOMER_NAME = 'constructora hidalgo' AND PRODUCT_CATEGORY IN ('Herramientas', 'Suspension') AND DATE_SELL BETWEEN '2023-01-01' AND '2023-12-31';",
-                "SELECT DATE_SELL, TIME_SELL FROM SALES order by ID_SALES  DESC LIMIT 1;",
-                "SELECT DATE_SELL, AVG(PRODUCT_PRICE) AS Promedio_Ventas FROM SALES GROUP BY DATE_SELL;",
-                "SELECT CUSTOMER_ID, SUM(PRODUCT_PRICE * PRODUCTS_IN_STOCK) AS TOTAL_GASTADO FROM SALES GROUP BY CUSTOMER_ID ORDER BY TOTAL_GASTADO DESC;",
-                "SELECT PRODUCT_NAME FROM SALES WHERE PRODUCT_CATEGORY = 'Repuestos' ORDER BY PRODUCT_NAME;",
-                "SELECT CUSTOMER_NAME, SUM(PRODUCT_PRICE) AS compra_mas_costosa FROM SALES GROUP BY CUSTOMER_NAME ORDER BY compra_mas_costosa DESC ;",
-                "SELECT PRODUCT_CATEGORY, COUNT(*) AS CANTIDAD_VENDIDO FROM SALES GROUP BY PRODUCT_CATEGORY;",
-                "SELECT SELLER_NAME FROM SALES GROUP BY SELLER_NAME ORDER BY (DAYS(MAX(DATE_SELL)) - DAYS(MIN(DATE_SELL))) DESC FETCH FIRST 1 ROWS ONLY;",
-                "SELECT CUSTOMER_ID, COUNT(*) AS NUM_TRANS FROM SALES GROUP BY CUSTOMER_ID ORDER BY COUNT(*) DESC ;",
-                "SELECT COUNT(*) as CUSTOMER_ADDRESS_VACIO  FROM SALES WHERE CUSTOMER_ADDRESS IS NULL;",
-                "SELECT AVG(PRODUCT_PRICE) as PROMEDIO_PRODUCTOS FROM SALES;",
-                "SELECT COUNT(*) as Repuestos FROM SALES WHERE PRODUCT_CATEGORY = 'Repuestos';",
-                "SELECT COUNT(DISTINCT PRODUCT_NAME) as PRODUCTOS_DIFERENTES FROM SALES ;",
-                "SELECT SELLER_ID ,  COUNT(*) as VENTAS FROM SALES GROUP BY SELLER_ID;",
-                "SELECT PRODUCT_NAME, PRODUCT_PRICE FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES);",
-                "SELECT SUM(PRODUCT_PRICE) AS Total_Ventas FROM SALES;",
-                "SELECT CUSTOMER_NAME FROM SALES GROUP BY CUSTOMER_NAME HAVING COUNT(DISTINCT PRODUCT_CATEGORY) = (SELECT COUNT(DISTINCT PRODUCT_CATEGORY) FROM SALES);"
-    ]
-
-    def clasificar_similitud(similitud):
-        if abs(similitud - 1.00) < 0.01:  # Comparación con una pequeña diferencia
-            return "Exactamente Igual"
-        elif 0.60 <= similitud <= 0.90:
-            return "Similar"
-        elif 0.20 <= similitud <= 0.50:
-            return "Distinto"
-        else:
-            return "No SQL"
-
-    # Representación vectorial de los textos
-    vectorizador = TfidfVectorizer()
-    tfidf_matrix = vectorizador.fit_transform([query] + ejemplos)
-
-    # Calcular la similitud del coseno entre el texto de consulta y los textos de referencia
-    similitudes = cosine_similarity(tfidf_matrix[0], tfidf_matrix[1:])
-
-    # Crear una lista que asocie cada similitud con su texto de referencia
-    similitudes_con_textos = list(zip(ejemplos, similitudes[0]))
-
-    # Ordenar la lista de similitudes por el valor de similitud en orden descendente
-    similitudes_con_textos.sort(key=lambda x: x[1], reverse=True)
-
-    # Encontrar el valor mas alto de similitud
-    for i in range(1):
-        texto_similar = similitudes_con_textos[i][0]
-        similitud = round(similitudes_con_textos[i][1],1)
-        clasificacion = clasificar_similitud(similitud)
-
-
 
     import pandas as pd
     import os, ibm_db, ibm_db_dbi as dbi, pandas as pd
@@ -420,7 +366,6 @@ def sentencia_sql(json_data):
     response_data = {
                     'sentencia SQL': sql_formateado,
                     'resultado SQL': informacion_texto,
-                     'clasificacion': clasificacion
                     }
 
 

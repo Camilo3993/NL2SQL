@@ -107,29 +107,29 @@ def clasificacion_pregunta(json_data):
         Clasificacion: Valido.
 
     Ejemplo 3:
-        Pregunta: Cuántos productos diferentes se vendieron?.
+        Pregunta: Cuántos productos diferentes se vendieron
         Entidades: entidad: producto, condición: diferentes
         Clasificacion: Valido.
 
     Ejemplo 4:
         Pregunta: Cuáles son los clientes que compraron el producto traje de baño.
-        Entidades: producto: traje de baño, entidad: cliente
+        Entidades: entidad:producto, producto: traje de baño, entidad: cliente
         Clasificacion: Valido.
 
     Ejemplo 5:
         Pregunta: necesito el promedio de ventas por dia durante marzo .
         Entidades: entidad: ventas, condicion: promedio, fecha: marzo
-        Clasificacion: Valido
-  
+        Clasificacion: Valido.
+
     Ejemplo 6:
-        Pregunta: jdjdjdj cual es el vendedor que ha vendido mas en abril ssmssmmsmsms
-        Entidades: entidad: vendedor, condicion: mas ventas, fecha: abril
-        Clasificacion: Valido
+        Pregunta: jdjdjdj cual es el vendedor que ha vendido mas en abril ssmssmmsmsms.
+        Entidades: entidad: vendedor, condicion: mas ventas, fecha: abril.
+        Clasificacion: Valido.
 
     Ejemplo 7:
-        Pregunta: las ballenas viven donde
-        Entidades: entidad: ballenas, lugar: donde viven las ballenas
-        Clasificacion: No Valido
+        Pregunta: las ballenas viven donde.
+        Entidades: entidad: ballenas, lugar: donde viven las ballenas.
+        Clasificacion: No Valido.
 
     Ejemplo 8:
         Pregunta: cuanto es 2 + 2 . 
@@ -195,7 +195,6 @@ def clasificacion_pregunta(json_data):
         Pregunta:Cuál es la fecha y hora de la ultima transacción registrada
         Entidades:entidad: fecha y hora, valor: la ultima transacción registrada
         Clasificacion: Valido
-
     """
 
 
@@ -217,92 +216,92 @@ def clasificacion_pregunta(json_data):
     
     ejemplos = """
     Ejemplo 1:
-    Pregunta: Necesito las ventas de los cliente para todo el año 2023 en las categorías Herramientas y Suspensión.
-    Clasificacion:  Valido
+        Pregunta: Necesito las ventas de los cliente para todo el año 2023 en las categorías Herramientas y Suspensión.
+        Clasificacion:  Valido
 
     Ejemplo 2:
-    Pregunta: cuales son los 5 productos mas comprado por los clientes el año pasado
-    Clasificacion: Valido
+        Pregunta: cuales son los 5 productos mas comprado por los clientes el año pasado
+        Clasificacion: Valido
     
     Ejemplo 3:
-    Pregunta: quiero saber cual vendedor a vendido mas el producto iphone 10
-    Clasificacion: Valido
+        Pregunta: quiero saber cual vendedor a vendido mas el producto iphone 10
+        Clasificacion: Valido
 
     Ejemplo 4:
-    Pregunta: Cuantos años tienes 
-    Clasificacion: No valido
+        Pregunta: Cuantos años tienes 
+        Clasificacion: No valido
 
     Ejemplo 5:
-    Pregunta: Cuáles son los clientes que compraron el producto traje de baño
-    Clasificacion: Valido
+        Pregunta: Cuáles son los clientes que compraron el producto traje de baño
+        Clasificacion: Valido
 
     Ejemplo 6:
-    Pregunta: scncckmskcscn nvmcddnvn
-    Clasificacion: No valido
+        Pregunta: scncckmskcscn nvmcddnvn
+        Clasificacion: No valido
 
     Ejemplo 7:
-    Pregunta: Cuántos productos diferentes se vendieron?
-    Clasificacion: Valido
+        Pregunta: Cuántos productos diferentes se vendieron
+        Clasificacion: Valido
     
     Ejemplo 8:
-    Pregunta: cuanto es 2 + 2  
-    Clasificacion: No valido 
+        Pregunta: cuanto es 2 + 2  
+        Clasificacion: No valido 
     
     Ejemplo 9:
-    Pregunta: necesito el promedio de ventas durante enero por el vendedor Camilo  
-    Clasificacion: Valido
+        Pregunta: necesito el promedio de ventas durante enero por el vendedor Camilo  
+        Clasificacion: Valido
     
     Ejemplo 10:
-    Pregunta: jdjdjdj cual es el vendedor que ha vendido mas en abril ssmssmmsmsms
-    Clasificacion: Valido
+        Pregunta: jdjdjdj cual es el vendedor que ha vendido mas en abril ssmssmmsmsms
+        Clasificacion: Valido
     
     Ejemplo 11:
-    Pregunta: necesito saber cual es el vendedor con mas ventas durante junio
-    Clasificacion: Valido
+        Pregunta: necesito saber cual es el vendedor con mas ventas durante junio
+        Clasificacion: Valido
     
     Ejemplo 12:
-    Pregunta: cuál es el cliente que ha gastado más dinero en total
-    Clasificacion: Valido
+        Pregunta: cuál es el cliente que ha gastado más dinero en total
+        Clasificacion: Valido
     
     Ejemplo 13:
-    Pregunta:cual es el valor de la mascara panda
-    Clasificacion: Valido
+        Pregunta:cual es el valor de la mascara panda
+        Clasificacion: Valido
     
     Ejemplo 14:
-    Pregunta:cuál es el cliente que ha realizado el mayor número de transacciones
-    Clasificacion: Valido
+        Pregunta:cuál es el cliente que ha realizado el mayor número de transacciones
+        Clasificacion: Valido
     
     Ejemplo 15:
-    Pregunta:cuál es el producto con el precio mas alto
-    Clasificacion: Valido
+        Pregunta:cuál es el producto con el precio mas alto
+        Clasificacion: Valido
     
     Ejemplo 16:
-    Pregunta: cuántos productos se vendieron en cada una de las categorías de productos
-    Clasificacion: Valido
+        Pregunta: cuántos productos se vendieron en cada una de las categorías de productos
+        Clasificacion: Valido
     
     Ejemplo 17:
-    Pregunta:cuál es el vendedor que ha realizado la venta más costosa en una sola transacción
-    Clasificacion: Valido
+        Pregunta:cuál es el vendedor que ha realizado la venta más costosa en una sola transacción
+        Clasificacion: Valido
     
     Ejemplo 18:
-    Pregunta:cuál es el producto más vendido en la categoría repuestos ordenados por el nombre
-    Clasificacion: Valido
+        Pregunta:cuál es el producto más vendido en la categoría repuestos ordenados por el nombre
+        Clasificacion: Valido
     
     Ejemplo 19:
-    Pregunta:cuál es el promedio de ventas de los productos por día
-    Clasificacion: Valido
+        Pregunta:cuál es el promedio de ventas de los productos por día
+        Clasificacion: Valido
     
     Ejemplo 20:
-    Pregunta:cuantos productos de la categoria electronica se han vendido
-    Clasificacion: Valido
+        Pregunta:cuantos productos de la categoria electronica se han vendido
+        Clasificacion: Valido
     
     Ejemplo 21:
-    Pregunta:cuántos clientes tienen direccion del cliente vacio
-    Clasificacion: Valido
+        Pregunta:cuántos clientes tienen direccion del cliente vacio
+        Clasificacion: Valido
 
     Ejemplo 22:
-    Pregunta:Cuál es la fecha y hora de la ultima transacción registrad
-    Clasificacion: Valido
+        Pregunta:Cuál es la fecha y hora de la ultima transacción registrad
+        Clasificacion: Valido
 
     
     """
@@ -348,7 +347,7 @@ def clasificacion_pregunta(json_data):
         Classification: Valido.
 
     Example 3:
-        Question: How many different products were sold?
+        Question: How many different products were sold
         Entities: entity: product, condition: different
         Classification: Valido.
 
@@ -470,7 +469,7 @@ def clasificacion_pregunta(json_data):
         Classification: Valido.
 
     Example 3:
-        Question: How many different products were sold?
+        Question: How many different products were sold
         Classification: Valido.
 
     Example 4:
@@ -561,7 +560,7 @@ def clasificacion_pregunta(json_data):
         cadena_completa = cadena_completa[:longitud_deseada]
 
     
-
+    #print (clasificacion_)
     # Crea una lista con tus variables para facilitar la comprobación.
     variables = [clasificacion_, cadena_completa, classification_, classification_2]
 
@@ -569,7 +568,7 @@ def clasificacion_pregunta(json_data):
     # Utiliza una lista de comprensión para reemplazar '\n\nP' con una cadena vacía en la segunda cadena
     variables_limpias = [variable.replace('\n\nP', '').replace('\nNo', '').replace('.', '').strip()  for variable in variables]
 
-
+    
     #print(variables_limpias)
 
     # Cuenta cuántas veces aparece "Valido" y "No Valido".
