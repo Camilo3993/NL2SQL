@@ -50,6 +50,10 @@ def sentencia_sql(json_data):
     # Generación de sentencia SQL
     pregunta_usuario = json_data['pregunta']#"¿Cuál es el cliente que ha realizado el mayor número de transacciones?"
 
+    # recibe la informacion de la base de datos
+    dataModel = json_data['dataModel']
+
+    ejemplos = json_data['ejemplos']
 
     import re
 
@@ -67,143 +71,6 @@ def sentencia_sql(json_data):
 
     pregunta_formateada = formatear_pregunta(pregunta_usuario)
 
-    # Define el diccionario de modelo de datos con la estructura esperada
-    dataModel = {
-        "tables": [
-        {
-            "tableName": "SALES",
-            "columns": [
-                {
-                    "columnId": 1,
-                    "columnName": "ID_SALES",
-                    "columnType": "BIGINT",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 2,
-                    "columnName": "PRODUCT_NAME",
-                    "columnType": "VARCHAR",
-                    "description": "this is name of the product sold"
-                },
-                {
-                    "columnId": 3,
-                    "columnName": "PRODUCT_CODE",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 4,
-                    "columnName": "PRODUCT_CATEGORY",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 5,
-                    "columnName": "CATEGORY_CODE",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 6,
-                    "columnName": "PRODUCT_PRICE",
-                    "columnType": "DECIMAL",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 7,
-                    "columnName": "PRODUCTS_IN_STOCK",
-                    "columnType": "INTEGER",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 8,
-                    "columnName": "PRODUCT_DATE_ADDED",
-                    "columnType": "TIMESTAMP",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 9,
-                    "columnName": "PRODUCT_DATE_MODIFIED",
-                    "columnType": "TIMESTAMP",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 10,
-                    "columnName": "PRODUCT_MANUFACTURER",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 11,
-                    "columnName": "PRODUCT_SUPPLIER",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales",
-                    "useForTraining" : True
-                },
-                {
-                    "columnId": 12,
-                    "columnName": "DATE_SELL",
-                    "columnType": "DATE",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 13,
-                    "columnName": "TIME_SELL",
-                    "columnType": "TIME",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 14,
-                    "columnName": "SELLER_ID",
-                    "columnType": "INTEGER",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 15,
-                    "columnName": "SELLER_NAME",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 16,
-                    "columnName": "SELLER_CATEGORY",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 17,
-                    "columnName": "CUSTOMER_ID",
-                    "columnType": "INTEGER",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 18,
-                    "columnName": "CUSTOMER_NAME",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 19,
-                    "columnName": "CUSTOMER_ADDRESS",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 20,
-                    "columnName": "CUSTOMER_PHONE_NUMBER",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales"
-                },
-                {
-                    "columnId": 21,
-                    "columnName": "CUSTOMER_CATEGORY",
-                    "columnType": "VARCHAR",
-                    "description": "this is ID of sales"
-                }
-            ]
-        }
-    ]
-    }
 
     def extractDatabaseModelInfo(dataModel):
         database_info_text = ""
@@ -218,7 +85,7 @@ def sentencia_sql(json_data):
                 column_info_text = f"{column_name} ({column_type})"
                 columns_info.append(column_info_text)
 
-            table_info_text = f"Tabla {table_name} con los siguientes campos:  {', '.join(columns_info)}"
+            table_info_text = f"Tabla {table_name} con los siguientes campos: {', '.join(columns_info)}"
             database_info_text += table_info_text + "\n"
 
         return database_info_text
@@ -226,63 +93,25 @@ def sentencia_sql(json_data):
     # Ejemplo de uso:
     texto_descriptivo = extractDatabaseModelInfo(dataModel)
 
-    ejemplos = """
-    ejemplo 1:
-        Pregunta usuario : Cuál es el total de ventas hasta la fecha 
-        respuesta : SELECT SUM(PRODUCT_PRICE) AS Total_Ventas FROM SALES;
-    ejemplo 2:
-        Pregunta usuario : Cuál es el producto con el precio mas alto 
-        respuesta :SELECT PRODUCT_NAME, PRODUCT_PRICE FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES);
-    ejemplo 3:
-        Pregunta usuario : Cuál es el numero de ventas realizadas por cada vendedor 
-        respuesta : SELECT SELLER_ID ,  COUNT(*) as VENTAS FROM SALES GROUP BY SELLER_ID;
-    ejemplo 4:    
-        Pregunta usuario : cuantos productos diferentes se vendieron 
-        respuesta : SELECT COUNT(DISTINCT PRODUCT_NAME) as PRODUCTOS_DIFERENTES FROM SALES ;
-    ejemplo 5:
-        Pregunta usuario : Cuántos productos de la categoría Repuestos se vendieron 
-        respuesta :SELECT COUNT(*) as Repuestos FROM SALES WHERE PRODUCT_CATEGORY = 'Repuestos';
-    ejemplo 6:
-        Pregunta usuario : Cuál es el precio promedio de los productos 
-        respuesta : SELECT AVG(PRODUCT_PRICE) as PROMEDIO_PRODUCTOS FROM SALES;
-    ejemplo 7:
-        Pregunta usuario : Cuántos clientes tienen 'CUSTOMER_ADDRESS'  vacio 
-        respuesta : SELECT COUNT(*) as CUSTOMER_ADDRESS_VACIO  FROM SALES WHERE CUSTOMER_ADDRESS IS NULL;
-    ejemplo 8:
-        Pregunta usuario : Cuál es el cliente que ha realizado el mayor número de transacciones  
-        respuesta : SELECT CUSTOMER_ID, COUNT(*) AS NUM_TRANS FROM SALES GROUP BY CUSTOMER_ID ORDER BY COUNT(*) DESC ;
-    ejemplo 9:
-        Pregunta usuario : Cuál es el nombre del vendedor con más experiencia 
-        respuesta : SELECT SELLER_NAME FROM SALES GROUP BY SELLER_NAME ORDER BY (DAYS(MAX(DATE_SELL)) - DAYS(MIN(DATE_SELL))) DESC FETCH FIRST 1 ROWS ONLY;
-    ejemplo 10:
-        Pregunta usuario : Cuántos productos se vendieron en cada una de las categorías de productos 
-        respuesta : SELECT PRODUCT_CATEGORY, COUNT(*) AS CANTIDAD_VENDIDO FROM SALES GROUP BY PRODUCT_CATEGORY;
-    ejemplo 11:
-        Pregunta usuario : Cuál es el cliente que ha realizado la compra más costosa en una sola transacción 
-        respuesta : SELECT CUSTOMER_NAME, SUM(PRODUCT_PRICE) AS compra_mas_costosa FROM SALES GROUP BY CUSTOMER_NAME ORDER BY compra_mas_costosa DESC ;
-    ejemplo 12:
-        Pregunta usuario :Cuál es el producto más vendido en la categoría 'Repuestos' ordenados por el nombre 
-        respuesta : SELECT PRODUCT_NAME FROM SALES WHERE PRODUCT_CATEGORY = 'Repuestos' ORDER BY PRODUCT_NAME;
-    ejemplo 13:
-        Pregunta usuario : Cuál es el cliente que ha gastado más dinero en total  
-        respuesta : SELECT CUSTOMER_ID, SUM(PRODUCT_PRICE * PRODUCTS_IN_STOCK) AS TOTAL_GASTADO FROM SALES GROUP BY CUSTOMER_ID ORDER BY TOTAL_GASTADO DESC;
-    ejemplo 14:
-        Pregunta usuario : Cuál es el promedio de ventas de los productos por día  
-        respuesta : SELECT DATE_SELL, AVG(PRODUCT_PRICE) AS Promedio_Ventas FROM SALES GROUP BY DATE_SELL; 
-    ejemplo 15:
-        Pregunta usuario : Cuál es la fecha y hora de la última transacción registrada 
-        respuesta : SELECT DATE_SELL, TIME_SELL FROM SALES order by ID_SALES  DESC LIMIT 1;
-    ejemplo 16:
-        Pregunta usuario : necesito las ventas del cliente constructora hidalgo para todo el año 2023 en las categorias Herramientas y Suspension 
-        respuesta : SELECT SUM(SALES.PRODUCT_PRICE * SALES.PRODUCTS_IN_STOCK) AS TOTAL_SALES FROM SALES WHERE CUSTOMER_NAME = 'constructora hidalgo' AND PRODUCT_CATEGORY IN ('Herramientas', 'Suspension') AND DATE_SELL BETWEEN '2023-01-01' AND '2023-12-31';
-    ejemplo 17:
-        Pregunta usuario : Cuál es el vendedor que ha realizado la venta más costosa en una sola transacción 
-        respuesta : SELECT SELLER_NAME FROM SALES WHERE PRODUCT_PRICE = (SELECT MAX(PRODUCT_PRICE) FROM SALES);
-    ejemplo 18:
-        Pregunta usuario : Cuál es el cliente que ha realizado compras en todas las categorías de productos disponibles
-        respuesta : SELECT CUSTOMER_NAME FROM SALES GROUP BY CUSTOMER_NAME HAVING COUNT(DISTINCT PRODUCT_CATEGORY) = (SELECT COUNT(DISTINCT PRODUCT_CATEGORY) FROM SALES);
+    # Inicializa una cadena vacía para almacenar el texto combinado
+    texto_combinado = "ejemplos = \"\"\"\n"
 
-    """
+    # Recorre la lista de ejemplos y agrega cada ejemplo al texto combinado
+    for i, ejemplo in enumerate(ejemplos, start=1):
+        pregunta = ejemplo["pregunta_usuario"]
+        respuesta = ejemplo["respuesta"]
+        
+        # Agrega el número de ejemplo, la pregunta y la respuesta al texto
+        texto_combinado += f"ejemplo {i}:\n    Pregunta usuario : {pregunta}\n    respuesta : {respuesta}\n"
+
+    # Agrega el cierre de la cadena
+    texto_combinado += "\"\"\""
+
+    # Imprime el texto combinado
+    #print(texto_combinado)
+
+    
+    
 
     def queryFactory2(texto_descriptivo, pregunta_usuario , ejemplos):
         promptTuning = "traduce texto a sql , debes analizar la pregunta del usuario entendiendo que te esta solicitando y cual es el proposito de la pregunta , para construir la sentencia sql debes tomar en consideracion la descripción de la unica tabla y sus campos y los ejemplos que se te entregan para guiarte, solo devolver la sentencia sql , no repetir informacion y no inventar informacion ademas crea alias para darle mas entendimiento a la sentencia sql"
@@ -295,7 +124,7 @@ def sentencia_sql(json_data):
         resultado = prompt.generate(prompt_text, model_id, parameters)
         return resultado
 
-    query = queryFactory2(texto_descriptivo, pregunta_formateada , ejemplos)
+    query = queryFactory2(texto_descriptivo, pregunta_formateada , texto_combinado)
 
     print(query)
 
