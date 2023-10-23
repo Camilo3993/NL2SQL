@@ -49,6 +49,8 @@ def extraccion_entidades(json_data):
     # Generación de sentencia SQL
     pregunta_usuario = json_data['pregunta']#"¿Cuál es el cliente que ha realizado el mayor número de transacciones?"
 
+    ejemplos = json_data['ejemplos']
+
 
     import re
 
@@ -66,82 +68,22 @@ def extraccion_entidades(json_data):
 
     pregunta_formateada = formatear_pregunta(pregunta_usuario)
     #print(f"Pregunta formateada: {pregunta_formateada}")
+
+    # Inicializa una cadena vacía para almacenar el texto combinado
+    texto_combinado = "ejemplos = \"\"\"\n"
+
+    # Recorre la lista de ejemplos y agrega cada ejemplo al texto combinado
+    for i, ejemplo in enumerate(ejemplos, start=1):
+        pregunta = ejemplo["pregunta_usuario"]
+        respuesta = ejemplo["respuesta"]
+        
+        # Agrega el número de ejemplo, la pregunta y la respuesta al texto
+        texto_combinado += f"ejemplo {i}:\n    Pregunta usuario : {pregunta}\n    respuesta : {respuesta}\n"
+
+    # Agrega el cierre de la cadena
+    texto_combinado += "\"\"\""
     
 
-
-    ejemplos = """
-    Ejemplo 1:
-      Texto: Necesito las ventas de los cliente para todo el año 2023 en las categorías Herramientas y Suspensión.
-      Respuesta:  entidad: cliente ,fecha: 2023, categorias: herramientas, suspensión 
-
-    Ejemplo 2:
-      Texto: cuales son los 5 productos de todas las categoria A mas comprado por los clientes el año pasado
-      Respuesta: entidad: cliente, fecha: año pasado, entidad: productos , condicion : mas comprados , valor : 5 , condicion:todas las categorias
-
-    Ejemplo 3:
-      Texto: Cuál es el total de ventas realizadas por el vendedor que ha trabajado menos.
-      Respuesta: entidad: vendedor, objetivo: trabajado menos, valor: total de ventas
-
-    Ejemplo 4:
-      Texto: Cuáles son los clientes que compraron el producto traje de baño
-      Respuesta: producto: traje de baño, entidad: cliente
-
-    Ejemplo 5:
-      Texto: Cuáles fueron los gastos totales para el mes de junio de 2023?
-      Respuesta: fecha: 2023, mes: junio, valor: gastos totales
-
-    Ejemplo 6:
-      Texto: Cuántos productos diferentes se vendieron?
-      Respuesta: entidad: producto, condición: diferentes
-  
-    Ejemplo 7:
-      Texto: cual es el cliente que hecho mas compras en la tienda 
-      Respuesta: entidad: cliente, condición: mas compras 
-  
-    Ejemplo 8:
-      Texto: necesito las ventas del cliente Constructora Campos durante todo el año 2021 
-      Respuesta: entidad: cliente,nombre :Constructora Campos, entidad: ventas , fecha : 2021 , valor :todo
-  
-    Ejemplo 9:
-      Texto: Cuál es el cliente que ha realizado mas de 10 transacciones en el mes de mayo 
-      Respuesta: entidad: cliente, entidad:transacciones  , condicion : mas de 10 transacciones , fecha: mayo , fecha: mes
-  
-    Ejemplo 10:
-      Texto: quien es el vendedor que aumentado sus ventas durante el año 2023
-      Respuesta: entidad: vendedor, condicion : aumentado ventas , fecha: 2023
-  
-    Ejemplo 11:
-      Texto:  Cuál es el nombre del gerente con más experiencia
-      Respuesta: entidad: gerente, condicion : mas experiencia 
-  
-    Ejemplo 12:
-      Texto: Cuántos vendedores llevan mas de 2 años trabajando
-      Respuesta: entidad: vendedor, condicion : mas de 2 años
-  
-    Ejemplo 13:
-      Texto: porque el pasto es verde
-      Respuesta: entidad: pasto , valor :verde
-
-    Ejemplo 14:
-      Texto: necesito saber cual es el vendedor con mas ventas durante junio
-      Respuesta: entidad: vendedor , condicion : mas ventas , fecha : junio
-  
-    Ejemplo 15:
-      Texto: cuanto es 2 + 2 
-      Respuesta: entidad: numero , condicion: sumar , valor: 2 
-  
-    Ejemplo 16:
-      Texto: cuál es el numero de ventas realizadas por cada vendedor
-      Respuesta: entidad: vendedor , condicion: por cada vendedor , valor: numero de ventas
-  
-    Ejemplo 17:
-      Texto: cuántos clientes tienen direccion del cliente vacio
-      Respuesta: entidad: cliente, condicion: vacio , valor : direccion del cliente
-
-    Ejemplo 18:
-      Texto: como puedo hacer un torta
-      Respuesta: entidad : torta , condicion : como puedo hacer
-      """
 
 
     def extracccion(texto, ejemplos):
@@ -155,7 +97,8 @@ def extraccion_entidades(json_data):
         resultado = prompt.generate(prompt_text, model_id, parameters)
         return resultado
 
-    entidades = extracccion(pregunta_formateada, ejemplos)
+    entidades = extracccion(pregunta_formateada, texto_combinado)
+    
     
     response_data = {'Entidades': entidades}
 

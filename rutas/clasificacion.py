@@ -53,6 +53,14 @@ def clasificacion_pregunta(json_data):
     # guardamos las entidades de la pregunta
     entidades = json_data['entidades']
 
+    ejemplos_1 = json_data['ejemplos_1']
+
+    ejemplos_2 = json_data['ejemplos_2']
+
+    examples_1 = json_data['examples_1']
+
+    examples_2 = json_data['examples_2']
+
     import re
 
     def formatear_pregunta(pregunta_usuario):
@@ -69,7 +77,39 @@ def clasificacion_pregunta(json_data):
 
     pregunta_formateada = formatear_pregunta(pregunta_usuario)
 
-    
+
+    def generar_texto_combinado(ejemplos):
+        texto_combinado = "ejemplos = \"\"\"\n"
+        for i, ejemplo in enumerate(ejemplos, start=1):
+            pregunta = ejemplo["pregunta_usuario"]
+            texto_combinado += f"ejemplo {i}:\n  Pregunta usuario : {pregunta}\n"
+            if "entidades" in ejemplo:
+                entidades = ejemplo["entidades"]
+                texto_combinado += f"\n     Entidades : {entidades}\n"
+            clasificacion = ejemplo["clasificacion"]
+            texto_combinado += f"\n     Clasificacion : {clasificacion}\n"
+        texto_combinado += "\"\"\""
+        return texto_combinado
+
+    def generar_texto_combinado_2(ejemplos):
+        texto_combinado = "Examples = \"\"\"\n"
+        for i, ejemplo in enumerate(ejemplos, start=1):
+            pregunta = ejemplo["pregunta_usuario"]
+            texto_combinado += f"Example {i}:\n  Question : {pregunta}\n"
+            if "entidades" in ejemplo:
+                entidades = ejemplo["entidades"]
+                texto_combinado += f"  Entities : {entidades}\n"
+            clasificacion = ejemplo["clasificacion"]
+            texto_combinado += f"  Classification : {clasificacion}\n"
+        texto_combinado += "\"\"\""
+        return texto_combinado
+
+    # Generar el texto combinado para cada conjunto de ejemplos
+    texto_combinado_1 = generar_texto_combinado(ejemplos_1)
+    texto_combinado_2 = generar_texto_combinado(ejemplos_2)
+    texto_combinado_3 = generar_texto_combinado_2(examples_1)
+    texto_combinado_4 = generar_texto_combinado_2(examples_2)
+
 
     target_language = "english"
     from_language = "spanish"
@@ -92,116 +132,12 @@ def clasificacion_pregunta(json_data):
 
     user_question = translate(pregunta_usuario, from_language, target_language)
     entities =  translate(entidades, from_language, target_language)
-    
-    
-
-    ejemplos = """
-    Ejemplo 1:
-        Pregunta: Necesito las ventas de los cliente para todo el año 2023 en las categorías Herramientas y Suspensión.
-        Entidades: entidad:cliente, fecha: 2023, categorias: herramientas, suspensión
-        Clasificacion:  Valido.
-
-    Ejemplo 2:
-        Pregunta: cuales son los 5 productos mas comprado por los clientes el año pasado.
-        Entidades: entidad: cliente, fecha: año pasado, entidad: productos , condicion : mas comprados , valor : 5
-        Clasificacion: Valido.
-
-    Ejemplo 3:
-        Pregunta: Cuántos productos diferentes se vendieron
-        Entidades: entidad: producto, condición: diferentes
-        Clasificacion: Valido.
-
-    Ejemplo 4:
-        Pregunta: Cuáles son los clientes que compraron el producto traje de baño.
-        Entidades: entidad:producto, producto: traje de baño, entidad: cliente
-        Clasificacion: Valido.
-
-    Ejemplo 5:
-        Pregunta: necesito el promedio de ventas por dia durante marzo .
-        Entidades: entidad: ventas, condicion: promedio, fecha: marzo
-        Clasificacion: Valido.
-
-    Ejemplo 6:
-        Pregunta: jdjdjdj cual es el vendedor que ha vendido mas en abril ssmssmmsmsms.
-        Entidades: entidad: vendedor, condicion: mas ventas, fecha: abril.
-        Clasificacion: Valido.
-
-    Ejemplo 7:
-        Pregunta: las ballenas viven donde.
-        Entidades: entidad: ballenas, lugar: donde viven las ballenas.
-        Clasificacion: No Valido.
-
-    Ejemplo 8:
-        Pregunta: cuanto es 2 + 2 . 
-        Entidades: entidad: numero , condicion: sumar , valor: 2
-        Clasificacion: No valido .
-
-    Ejemplo 9:
-        Pregunta: scncckmskcscn nvmcddnvn.
-        Entidades: entidad: scncckmskcscn, entidad: nvmcddnvn
-        Clasificacion: No valido.
-
-    Ejemplo 10:
-        Pregunta: donde viven los peces .
-        Entidades: entidad: peces, lugar: donde viven los peces
-        Clasificacion: No Valido
-
-    Ejemplo 11:
-        Pregunta: como puedo crear un torta
-        Entidades: entidad:crear , entidad:torta
-        Clasificacion: No Valido
-
-    Ejemplo 12:
-        Pregunta: como puedo llegar a la calle maria antonia
-        Entidades: entidad: calle, nombre: maria antonia
-        Clasificacion: No Valido
-
-    Ejemplo 13:
-        Pregunta: donde queda la calle camilo campos
-        Entidades: entidad: calle, nombre: camilo campos
-        Clasificacion: No Valido
-
-    Ejemplo 14:
-        Pregunta: quiero saber como construir un cohete para ir al espacio
-        Entidades: entidad: cohete, valor: ir al espacio, entidad: construir, valor: cohete
-        Clasificacion: No Valido
-
-    Ejemplo 15:
-        Pregunta: puedes hacer mi trabajo por mi
-        Entidades:entidad: mi trabajo, valor: por mi
-        Clasificacion: No Valido
-
-    Ejemplo 16:
-        Pregunta: Cuantos años tienes .
-        Entidades: entidad: años, condicion: tienes
-        Clasificacion: No valido.
-
-    Ejemplo 17:
-        Pregunta:cual es el valor de la mascara panda
-        Entidades: producto, valor: mascara de panda
-        Clasificacion: Valido
-
-    Ejemplo 18:
-        Pregunta:cuál es el vendedor que ha realizado la venta más costosa en una sola transacción
-        Entidades: entidad: vendedor, condicion: venta más costosa , valor: una sola transacción
-        Clasificacion: Valido
-
-    Ejemplo 19:
-        Pregunta:cuántos clientes tienen direccion del cliente vacio
-        Entidades: entidad: cliente, condicion: vacio , valor : direccion del cliente
-        Clasificacion: Valido
-
-    Ejemplo 20:
-        Pregunta:Cuál es la fecha y hora de la ultima transacción registrada
-        Entidades:entidad: fecha y hora, valor: la ultima transacción registrada
-        Clasificacion: Valido
-    """
 
 
     def clasificacion(texto, entidades, ejemplos):
-        promptTuning = "Clasifica la pregunta proporcionada como los valores 'Valido' o 'No valido' su naturaleza y los valores de sus entidades. Para clasificar las preguntas como Validas compara las entidades de la pregunta con los ejemplos si son similares es Valida y para las preguntas No validas haz lo mismo .Debes usar los ejemplos solo como guia para tu clasificacion pero no incluyas información de los ejemplos en la respuesta. Evita devolver la entrada original y solo entrega una clasificación. No repitas informacion ."
+        promptTuning = "Clasifica la pregunta proporcionada como los valores 'Valido' o 'No Valido' su naturaleza y los valores de sus entidades. Para clasificar las preguntas como Validas compara las entidades de la pregunta con los ejemplos si son similares es Valida y para las preguntas No Validas haz lo mismo .Debes usar los ejemplos solo como guia para tu clasificacion pero no incluyas información de los ejemplos en la respuesta. Evita devolver la entrada original y solo entrega una clasificación. No repitas informacion ."
 
-        prompt_text = f"Instrucciones que debes seguir: {promptTuning}\nEjemplos para guiar la clasificación:{ejemplos}\nPregunta a clasificar: {texto}\nEntidades de la pregunta:{entidades}\nClasificación: "
+        prompt_text = f"Instrucciones que debes seguir: {promptTuning}\nEjemplos para guiar la clasificación:{ejemplos}\nPregunta a clasificar: {texto}\nEntidades de la pregunta:{entidades}\nSolo devuelve la Clasificación: "
         #print(prompt_text)
         # Crear un objeto de la clase Prompt (asegúrate de tener access_token y project_id definidos previamente)
         prompt = Prompt(access_token, project_id)
@@ -210,106 +146,16 @@ def clasificacion_pregunta(json_data):
         resultado = prompt.generate(prompt_text, model_id, parameters)
         return resultado
 
-    clasificacion_ = clasificacion(pregunta_formateada , entidades , ejemplos)
+    clasificacion_ = clasificacion(pregunta_formateada , entidades , texto_combinado_1)
+    # Para acortar la variable y tomar solo los primeros 10 caracteres, puedes hacer lo siguiente:
     
     
     
-    ejemplos = """
-    Ejemplo 1:
-        Pregunta: Necesito las ventas de los cliente para todo el año 2023 en las categorías Herramientas y Suspensión.
-        Clasificacion:  Valido
 
-    Ejemplo 2:
-        Pregunta: cuales son los 5 productos mas comprado por los clientes el año pasado
-        Clasificacion: Valido
-    
-    Ejemplo 3:
-        Pregunta: quiero saber cual vendedor a vendido mas el producto iphone 10
-        Clasificacion: Valido
+    def clasificacion2(texto, ejemplos):
+        promptTuning = "Debes analizar las palabras claves de la pregunta y Clasificar la pregunta proporcionada como Valido o No Valido según su naturaleza .Solo devuelve una vez nomas la clasificacion. Las preguntas Válidas deben estar relacionadas con productos, vendedores, clientes, número de ventas, total de ventas, promedio de ventas, transacciones , entre otros, mientras que las preguntas No Válidas deben estar relacionadas con temas como el clima, series, cocina, danza, música, preguntas sobre la edad, sobre sentimientos y preguntas insultantes. No incluyas información de los ejemplos en la respuesta. Evita devolver la entrada original y solo entrega una clasificación. No repitas información."
 
-    Ejemplo 4:
-        Pregunta: Cuantos años tienes 
-        Clasificacion: No valido
-
-    Ejemplo 5:
-        Pregunta: Cuáles son los clientes que compraron el producto traje de baño
-        Clasificacion: Valido
-
-    Ejemplo 6:
-        Pregunta: scncckmskcscn nvmcddnvn
-        Clasificacion: No valido
-
-    Ejemplo 7:
-        Pregunta: Cuántos productos diferentes se vendieron
-        Clasificacion: Valido
-    
-    Ejemplo 8:
-        Pregunta: cuanto es 2 + 2  
-        Clasificacion: No valido 
-    
-    Ejemplo 9:
-        Pregunta: necesito el promedio de ventas durante enero por el vendedor Camilo  
-        Clasificacion: Valido
-    
-    Ejemplo 10:
-        Pregunta: jdjdjdj cual es el vendedor que ha vendido mas en abril ssmssmmsmsms
-        Clasificacion: Valido
-    
-    Ejemplo 11:
-        Pregunta: necesito saber cual es el vendedor con mas ventas durante junio
-        Clasificacion: Valido
-    
-    Ejemplo 12:
-        Pregunta: cuál es el cliente que ha gastado más dinero en total
-        Clasificacion: Valido
-    
-    Ejemplo 13:
-        Pregunta:cual es el valor de la mascara panda
-        Clasificacion: Valido
-    
-    Ejemplo 14:
-        Pregunta:cuál es el cliente que ha realizado el mayor número de transacciones
-        Clasificacion: Valido
-    
-    Ejemplo 15:
-        Pregunta:cuál es el producto con el precio mas alto
-        Clasificacion: Valido
-    
-    Ejemplo 16:
-        Pregunta: cuántos productos se vendieron en cada una de las categorías de productos
-        Clasificacion: Valido
-    
-    Ejemplo 17:
-        Pregunta:cuál es el vendedor que ha realizado la venta más costosa en una sola transacción
-        Clasificacion: Valido
-    
-    Ejemplo 18:
-        Pregunta:cuál es el producto más vendido en la categoría repuestos ordenados por el nombre
-        Clasificacion: Valido
-    
-    Ejemplo 19:
-        Pregunta:cuál es el promedio de ventas de los productos por día
-        Clasificacion: Valido
-    
-    Ejemplo 20:
-        Pregunta:cuantos productos de la categoria electronica se han vendido
-        Clasificacion: Valido
-    
-    Ejemplo 21:
-        Pregunta:cuántos clientes tienen direccion del cliente vacio
-        Clasificacion: Valido
-
-    Ejemplo 22:
-        Pregunta:Cuál es la fecha y hora de la ultima transacción registrad
-        Clasificacion: Valido
-
-    
-    """
-
-    def clasificacion(texto, ejemplos):
-        promptTuning = "Debes analizar las palabras claves de la pregunta y Clasificar la pregunta proporcionada como Valido o No valido según su naturaleza .Solo devuelve una vez nomas la clasificacion. Las preguntas Válidas deben estar relacionadas con productos, vendedores, clientes, número de ventas, total de ventas, promedio de ventas, transacciones , entre otros, mientras que las preguntas No válidas deben estar relacionadas con temas como el clima, series, cocina, danza, música, preguntas sobre la edad, sobre sentimientos y preguntas insultantes. No incluyas información de los ejemplos en la respuesta. Evita devolver la entrada original y solo entrega una clasificación. No repitas información."
-
-        prompt_text = f"Instrucciones que debes seguir: {promptTuning}\nEjemplos para guiar la clasificación:{ejemplos}\nPregunta a clasificar: {texto}\nClasificación: "
+        prompt_text = f"Instrucciones que debes seguir: {promptTuning}\nEjemplos para guiar la clasificación:{ejemplos}\nPregunta a clasificar: {texto}\nSolo devuelve la Clasificación: "
 
         # Crear un objeto de la clase Prompt (asegúrate de tener access_token y project_id definidos previamente)
         prompt = Prompt(access_token, project_id)
@@ -320,8 +166,7 @@ def clasificacion_pregunta(json_data):
         # Ahora, simplemente devolvemos la respuesta generada como está
         return resultado.strip()
 
-    clasificacion_2 = clasificacion(pregunta_formateada, ejemplos)
-    #print(f"Clasificación para la pregunta '{pregunta_formateada}': {clasificacion_1}")
+    clasificacion_2 = clasificacion2(pregunta_formateada, texto_combinado_2)
 
     # Calcular la longitud deseada
     longitud_deseada = len("Novalido ")
@@ -335,113 +180,6 @@ def clasificacion_pregunta(json_data):
 
     
 
-    examples = """
-    Example 1:
-        Question: I need the sales of customers for the entire year 2023 in the categories Tools and Suspension.
-        Entities: entity: customer, date: 2023, categories: tools, suspension
-        Classification: Valido.
-
-    Example 2:
-        Question: What are the top 5 products purchased by customers last year?
-        Entities: entity: customer, date: last year, entity: products, condition: most purchased, value: 5
-        Classification: Valido.
-
-    Example 3:
-        Question: How many different products were sold
-        Entities: entity: product, condition: different
-        Classification: Valido.
-
-    Example 4:
-        Question: Who are the customers that bought the swimsuit product?
-        Entities: product: swimsuit, entity: customer
-        Classification: Valido.
-
-    Example 5:
-        Question: I need the average daily sales during March.
-        Entities: entity: sales, condition: average, date: March
-        Classification: Valido
-
-    Example 6:
-        Question: How many products were sold in each of the product categories ?
-        Entities: entity: categories, condition: products, value: sold
-        Classification: Valido
-
-    Example 7:
-        Question: where the fish live.
-        Entities: entity: fish, location: where fish live
-        Classification: No valido
-
-    Example 8:
-        Question: how many years you have
-        Entities: entity: years, condition: you have
-        Classification: No valido.
-
-    Example 9:
-        Question: What is 2 + 2.
-        Entities: entity: number, condition: add, value: 2
-        Classification: No valido.
-
-    Example 10:
-        Question: how can I create a cake
-        Entities: entity:create, entity:cake
-        Classification: No valido
-
-    Example 11:
-        Question: how can I get to Maria Antonia street
-        Entities: entity: street, name: maria antonia
-        Classification: No valido
-
-    Example 12:
-        Question: where is Camilo Campos street located
-        Entities: entity: street, name: camilo campos
-        Classification: No valido
-
-    Example 13:
-        Question: I want to know how to build a rocket to go to space
-        Entities: entity: rocket, value: go to space, entity: build, value: rocket
-        Classification: No valido
-
-    Example 14:
-        Question: Can you do my work for me
-        Entities: entity: my work, value: for me
-        Classification: No valido
-    
-    Example 15:
-        Question: meet pablo neruda
-        Entities: entity: pablo neruda
-        Classification: No valido
-    
-    Example 16:
-        Question: scncckmskcscn nvmcddnvn.
-        Entities: entity: scncckmskcscn, entity: nvmcddnvn
-        Classification: No valido.
-    
-    Example 17:
-        Question:i need to know how i can cut my dog's hair
-        Entities: entity: dog, condition: shave the dog
-        Classification: No valido.
-    
-    Example 18:
-        Question: i want to listen to a song anuel aa
-        Entities: entity: song, name: anuel aa
-        Classification: No valido
-    
-    Example 19:
-        Question:where the lions live
-        Entities: entity: leones, location: where do leones live
-        Classification: No valido.
-    
-    Example 20:
-        Question:Which seller has made the most expensive sale in a single transaction ?
-        Entities:entity: seller , condition: expensive sale , value: one transaction
-        Classification: Valido.
-    
-    Ejemplo 21:
-        Pregunta:How many customers have a blank customer address ?
-        entidad:entity: customer , condition: empty , value: customer direction 
-        Clasificacion: Valido
-    
-    """
 
     def classification(text, entities, examples):
         promptTuning = "Classify the provided question as 'Valido' or 'No Valido' values by its nature and the values of its entities. To classify questions as Valido compare the entities of the question with the examples if they are similar it is Valido and for invalid questions do the same. You should use the examples only as a guide for your classification but do not include information from the examples in the answer. Avoid returning the original input and only provide a rating. Do not repeat information "
@@ -455,89 +193,14 @@ def clasificacion_pregunta(json_data):
         result = prompt.generate(prompt_text, model_id_2, parameters)
         return result
 
-    classification_ = classification(user_question, entities, examples)
+    classification_ = classification(user_question, entities, texto_combinado_3)
     
     
 
-    examples = """
-    Example 1:
-        Question: I need the sales of customers for the entire year 2023 in the categories Tools and Suspension.
-        Classification: Valido.
-
-    Example 2:
-        Question: What are the top 5 products purchased by customers last year?
-        Classification: Valido.
-
-    Example 3:
-        Question: How many different products were sold
-        Classification: Valido.
-
-    Example 4:
-        Question: Who are the customers that bought the swimsuit product?
-        Classification: Valido.
-
-    Example 5:
-        Question: I need the average daily sales during March.
-        Classification: Valido
-
-    Example 6:
-        Question: how many years you have
-        Classification: No valido.
-
-    Example 7:
-        Question: What is 2 + 2.
-        Classification: No valido.
-
-    Example 8:
-        Question: scncckmskcscn nvmcddnvn.
-        Classification: No valido.
-    
-    Example 9:
-        Question: meet pablo neruda
-        Classification: No valido.
-    
-    Example 10:
-        Question: i want to listen to a song anuel aa
-        Classification: No valido
-    
-    Example 11:
-        Question: where the fish live.
-        Classification: No valido
-    
-    Example 12:
-        Question:i need to know how i can cut my dog's hair
-        Classification: No valido.
-    
-    Example 13:
-        Question:how can i create a cake ?
-        Classification: No valido.
-    
-    Example 14:
-        Question:where the lions live
-        Classification: No valido.
-    
-    Example 15:
-        Question:where the lions live
-        Classification: No valido.
-    
-    Example 16:
-        Question: How many products were sold in each of the product categories ?
-        Classification: Valido
-    
-    Example 17:
-        Question: Which is the client that has spent the most money in total ?
-        Classification: Valido
-    
-    Ejemplo 18:
-        Pregunta:How many customers have a blank customer address ? 
-        Clasificacion: Valido
-
-    """
-
-    def classification(text, examples):
-        promptTuning = "Classify the provided question as 'Valido' or 'No valido' based on its nature. Valid questions should be related to products, sellers, customers, total amounts, or transactions only in that. Not valid questions should be related to weather , tvshow , cook , dance , series  ,  when asked about age, where live animals. Do not include information from the examples in your response. Avoid returning the original input, only the classification."
+    def classification2(text, examples):
+        promptTuning = "You must analyze the key words of the question and Classify the provided question as Valido or No Valido according to its nature, returning only once the classification. Valido questions should be related to products, vendors, customers, number of sales, total sales, average sales, transactions, among others, while No Valido questions should be related to topics such as weather, series, cooking, dance, music, questions about age, about feelings and insulting questions. Do not include information from the examples in the answer. Avoid returning the original entry and only provide a rating. Do not repeat information."
         
-        prompt_text = f"instructions to follow: {promptTuning}\nExamples to guide classification:{examples}\nQuestion to classify: {text}\nClassification: "
+        prompt_text = f"instructions to follow: {promptTuning}\nExamples to guide classification:{examples}\nQuestion to classify: {text}\n only returns the classification: "
         
         # Create an object of the Prompt class (make sure to have access_token and project_id defined previously)
         prompt = Prompt(access_token, project_id)
@@ -546,8 +209,8 @@ def clasificacion_pregunta(json_data):
         result = prompt.generate(prompt_text, model_id_2, parameters)
         return result
 
-    classification_2 = classification(user_question, examples)
-    #print(f"Clasificación para la pregunta '{pregunta_formateada}': {classification_2}")
+    classification_2 = classification2(user_question, texto_combinado_4)
+
 
     # Calcular la longitud deseada
     longitud_deseada = len(pregunta_formateada) + len("No valido") + len("Clasificación para la pregunta:       ")
@@ -559,30 +222,28 @@ def clasificacion_pregunta(json_data):
     if len(cadena_completa) > longitud_deseada:
         cadena_completa = cadena_completa[:longitud_deseada]
 
-    
-    #print (clasificacion_)
     # Crea una lista con tus variables para facilitar la comprobación.
     variables = [clasificacion_, cadena_completa, classification_, classification_2]
-
+    
+    
 
     # Utiliza una lista de comprensión para reemplazar '\n\nP' con una cadena vacía en la segunda cadena
-    variables_limpias = [variable.replace('\n\nP', '').replace('\nNo', '').replace('.', '').strip()  for variable in variables]
+    variables_limpias = [variable.replace('\n\nP', '').replace('\n', '').replace('.', '').strip()  for variable in variables]
 
-    
-    #print(variables_limpias)
-
+    print(variables_limpias)
     # Cuenta cuántas veces aparece "Valido" y "No Valido".
     conteo_valido = variables_limpias.count("Valido")
     conteo_no_valido = variables.count("No Valido")
 
+    total=conteo_valido - conteo_no_valido
+    
+
     clasificacion_final=""
 
     # Define una condición para tomar una decisión.
-    if conteo_valido >= 3:
+    if total >= 3:
         # Si hay 3 o más "Valido", ejecuta este código.
         clasificacion_final="Valido"
-        
-        
     else:
         clasificacion_final="No Valido"
         
