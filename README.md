@@ -98,3 +98,23 @@ Camino 2.
 {
   "Respuesta humanizada": "Soy un chatbot, por lo cual no tengo edad. Puedo ayudarte en alguna otra cosa."
 }
+
+### Ruta 5: Categorizar y crear una descripcion de las columnas de la base de datos
+
+**Descripción:** En esta ruta, se define la categoria a la cual pertenece la informacion de la columna mas los datos de dicha columna y se crea un descripcion de la columna .
+
+La quinta ruta es la "Categorizar y descripcion" Para utilizar esta función, se debe entregar el nombre de la columna la cual es obligatoria mas los datos o registors o filas de la columna para que el modelo pueda crear una descripcion de dicha columna.
+
+**Información necesaria:**
+
+{
+  "nombre_columna": "RUT Cliente ",
+  "datos": "1202934-4 "
+}
+
+**Resultado:**
+
+{
+  "Categoria": "Cliente",
+  "Descripcion": "El conjunto de datos indica el rut del cliente y sirve para identificar al cliente."
+}
